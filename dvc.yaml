@@ -1,0 +1,28 @@
+﻿stages:
+  prepare:
+    cmd: python prepare.py
+    deps:
+      - Entities.csv
+      - params.yaml
+      - prepare.py
+    outs:
+      - data/prepared
+
+  train:
+    cmd: python train.py
+    deps:
+      - data/prepared
+      - params.yaml
+      - train.py
+    outs:
+      - models/model.pkl  # Track specific file, not entire folder
+
+  evaluate:
+    cmd: python evaluate.py
+    deps:
+      - models/model.pkl
+      - data/prepared
+      - evaluate.py
+    metrics:
+      - metrics.json:
+          cache: false
